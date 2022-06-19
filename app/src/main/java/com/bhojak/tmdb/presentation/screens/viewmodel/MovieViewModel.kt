@@ -146,11 +146,13 @@ class MovieViewModel @Inject constructor(private val movieRepo: MovieRepo): View
         getMovieRecommendations(id)
     }
 
+
     private fun getMovieDetails(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.getMovieCacheFromRoom(id).distinctUntilChanged()
                 .collect{
-                    _movieDetails.value = TMDBUtil.jsonToMovieObject(it)
+                    if(it!=null)
+                        _movieDetails.value = TMDBUtil.jsonToMovieObject(it)
                 }
         }
     }
@@ -159,7 +161,8 @@ class MovieViewModel @Inject constructor(private val movieRepo: MovieRepo): View
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.getCreditsCacheFromRoom(id).distinctUntilChanged()
                 .collect{
-                    _movieCredits.value = TMDBUtil.jsonToCreditsObject(it)
+                    if(it!=null)
+                        _movieCredits.value = TMDBUtil.jsonToCreditsObject(it)
                 }
         }
     }
@@ -168,7 +171,8 @@ class MovieViewModel @Inject constructor(private val movieRepo: MovieRepo): View
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.getKeywordsCacheFromRoom(id).distinctUntilChanged()
                 .collect{
-                    _movieKeywords.value = TMDBUtil.jsonToKeywordsListObject(it)
+                    if(it!=null)
+                        _movieKeywords.value = TMDBUtil.jsonToKeywordsListObject(it)
                 }
         }
     }
@@ -176,10 +180,12 @@ class MovieViewModel @Inject constructor(private val movieRepo: MovieRepo): View
         viewModelScope.launch(Dispatchers.IO) {
             movieRepo.getRecommendationsCacheFromRoom(id).distinctUntilChanged()
                 .collect{
-                    _movieRecommendations.value = TMDBUtil.jsonToRecommendationsObject(it)
+                    if(it!=null)
+                        _movieRecommendations.value = TMDBUtil.jsonToRecommendationsObject(it)
                 }
         }
     }
+
 
     //category wise
     private fun storePopularMovies(){
